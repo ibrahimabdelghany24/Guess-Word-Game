@@ -45,8 +45,6 @@ let triesNumber = wordLength;
 let hints = Math.floor(wordLength / 2);
 let currentTry = 1;
 
-console.log(chosenWord);
-
 const allTries = document.querySelector(".all-tries");
 const checkButton = document.querySelector("button.check");
 const hintButton = document.querySelector("button.hint");

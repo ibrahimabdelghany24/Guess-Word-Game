@@ -8,10 +8,12 @@
 
 * {
   box-sizing: border-box;
+  font-family: "Faculty Glyphic", sans-serif;
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: "Open Sans", sans-serif; */
+  font-family: "Faculty Glyphic", sans-serif;
   padding: 0;
   margin: 0;
 }
@@ -31,8 +33,10 @@ h1 {
   margin: 0 auto;
   padding: 40px;
   background-color: #EEE;
-  height: calc(100vh - 77px - 70px);
+  height: calc(100vh - 81px - 70px);
   border-radius: 6px;
+  box-shadow: 5px 8px 8px 0 rgba(0, 0, 0, 0.3);
+  position: relative;
 
   .game-section {
     display: flex;
@@ -94,6 +98,7 @@ h1 {
       .hint {
         flex: 1;
         background-color: #015668;
+        animation: bounce 1s infinite ease-in-out paused;
       }
       .hint:hover {
         flex: 1;
@@ -114,6 +119,7 @@ h1 {
     border-radius: 5px;
     padding: 0 10px;
     background-color: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
     h2 {
       margin: 0;
       text-align: center;
@@ -132,7 +138,7 @@ h1 {
         margin-right: 20px;
       }
       .text {
-        font-size: 25px;
+        font-size: 24px;
       }
     }
     }
@@ -141,10 +147,28 @@ h1 {
       flex-direction: column-reverse;
       justify-content: space-between;
       align-items: center;
+
       p {
-          text-align: center;
-          font-size: 30px;
-          line-height: 1.6;
+        font-size: 30px;
+        padding: 20px 40px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      p.win {
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 1s infinite alternate ease-in-out;
+        border: 2px solid #2196F3;
+      }
+      p.lose {
+        background: rgba(0, 0, 0, 0.7);
+        border: 2px solid rgba(255, 0, 0, 0.8);
+        color: #ff4d4d;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        animation: shake 0.5s ease-in-out infinite alternate;
       }
       button {
         color: white;
@@ -165,14 +189,17 @@ h1 {
 }
 .in-place-color {
   background-color: var(--in-place) !important;
+  color: white !important;
 }
 
 .not-in-place-color {
   background-color: var(--not-place) !important;
+  color: white !important;
 }
 
 .wrong-color {
   background-color: var(--wrong)!important;
+  color: white !important;
 }
 
 footer {
@@ -183,4 +210,34 @@ footer {
   font-weight: bold;
   height: 70px;
   background-color: white;
+}
+
+@keyframes fadeIn {
+  0% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
 }

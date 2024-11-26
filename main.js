@@ -1,39 +1,99 @@
 let words = {
   4: [
-    "TREE",
-    "MOON",
-    "STAR",
-    "LAMP",
-    "FISH",
-    "WIND",
+    "LOVE",
+    "GAME",
+    "HOME",
+    "LIFE",
+    "HOPE",
+    "BLUE",
     "FIRE",
-    "BOOK",
-    "SHIP",
-    "CAVE",
+    "GOOD",
+    "KIND",
+    "TIME",
+    "WORK",
+    "SAFE",
+    "STAR",
+    "COLD",
+    "DARK",
+    "SOFT",
+    "TRUE",
+    "FREE",
+    "CUTE",
+    "BEST",
+    "WARM",
+    "SLOW",
+    "FAST",
+    "SONG",
+    "HIGH",
+    "DEEP",
+    "EASY",
+    "NICE",
+    "PLAY",
+    "TALK",
   ],
   5: [
-    "TABLE",
-    "CHAIR",
-    "PLANT",
-    "PIZZA",
-    "SMILE",
-    "BEACH",
-    "TRAIN",
+    "APPLE",
+    "BRAVE",
     "CLOUD",
-    "EARTH",
     "DREAM",
+    "EARTH",
+    "FLAME",
+    "GLORY",
+    "HAPPY",
+    "IVORY",
+    "JOKER",
+    "KNIFE",
+    "LEMON",
+    "MAGIC",
+    "NOBLE",
+    "OCEAN",
+    "PENNY",
+    "QUIET",
+    "ROBIN",
+    "SMILE",
+    "TRUTH",
+    "UNITY",
+    "VIOLET",
+    "WORLD",
+    "XENON",
+    "YOUTH",
+    "ZEBRA",
+    "WATER",
+    "FAITH",
+    "GRACE",
+    "PEACE",
   ],
   6: [
-    "GARDEN",
+    "PEOPLE",
+    "FRIEND",
+    "FAMILY",
+    "ACTION",
+    "FOLLOW",
+    "BEAUTY",
+    "HEALTH",
+    "SUMMER",
+    "WINTER",
+    "SPRING",
+    "AUTUMN",
+    "NATURE",
     "PLANET",
-    "MARKET",
-    "BRIDGE",
-    "LANTER",
-    "DRAGON",
-    "BEACON",
-    "SILVER",
-    "BUTTON",
-    "STREAM",
+    "SCHOOL",
+    "STUDY",
+    "WONDER",
+    "HAPPY",
+    "CANDLE",
+    "MORNING",
+    "THINGS",
+    "SECRET",
+    "SHADOW",
+    "BRIGHT",
+    "CHANGE",
+    "YELLOW",
+    "ORANGE",
+    "GUITAR",
+    "MOTION",
+    "BUTTER",
+    "GARDEN",
   ],
 };
 
@@ -45,11 +105,12 @@ let triesNumber = wordLength;
 let hints = Math.floor(wordLength / 2);
 let currentTry = 1;
 
+
 const allTries = document.querySelector(".all-tries");
 const checkButton = document.querySelector("button.check");
 const hintButton = document.querySelector("button.hint");
 const newGameButton = document.querySelector("button.new-game");
-let showedHints = Array(wordLength).fill(null);
+let showedLetters = Array(wordLength).fill(null);
 let currentInputs;
 
 animation = setInterval(() => {
@@ -90,10 +151,12 @@ function placeInputs() {
 }
 
 function getCurrentInputs() {
-  currentInputs = Array.from(
-    document.querySelectorAll(`.try-${currentTry} input`)
-  );
-  currentInputs[0].focus();
+  if (currentTry <= triesNumber) {
+    currentInputs = Array.from(
+      document.querySelectorAll(`.try-${currentTry} input`)
+    );
+    currentInputs[0].focus();
+  }
 }
 
 function inputEvents() {
@@ -102,9 +165,9 @@ function inputEvents() {
       if (input.value !== " ") {
         input.value = input.value.toUpperCase();
         if (i < wordLength - 1) {
-          for (let j = i; j < wordLength - 1; j++) {
-            if (!arr[j + 1].disabled) {
-              arr[j + 1].focus();
+          for (let j = i + 1; j < wordLength; j++) {
+            if (!arr[j].disabled) {
+              arr[j].focus();
               break;
             }
           }
@@ -117,28 +180,29 @@ function inputEvents() {
     input.addEventListener("keydown", (e) => {
       if (e.key === "ArrowLeft" && i > 0) {
         // Goes To The Nearest Input To The Left
-        for (let j = i; j > 0; j--) {
-          if (!arr[j - 1].disabled) {
-            arr[j - 1].focus();
+        for (let j = i - 1; j >= 0; j--) {
+          if (!arr[j].disabled) {
+            arr[j].focus();
             break;
           }
         }
       }
       if (e.key === "ArrowRight" && i < wordLength - 1) {
         // Goes To The Nearest Input To The Right
-        for (let j = i; j < wordLength - 1; j++) {
-          if (!arr[j + 1].disabled) {
-            arr[j + 1].focus();
+        for (let j = i + 1; j < wordLength; j++) {
+          if (!arr[j].disabled) {
+            arr[j].focus();
             break;
           }
         }
       }
       if (e.key === "Backspace" && i > 0) {
         input.value = "";
-        for (let j = i; j > 0; j--) {
-          if (!arr[j - 1].disabled) {
-            arr[j - 1].value = "";
-            arr[j - 1].focus();
+        // Deletes The Nearest Previous Input ==> (Not Disabled)
+        for (let j = i - 1; j >= 0; j--) {
+          if (!arr[j].disabled) {
+            arr[j].value = "";
+            arr[j].focus();
             break;
           }
         }
@@ -148,6 +212,7 @@ function inputEvents() {
 }
 
 function checkWin() {
+  // Means All Letters Were Typed
   return chosenWord === "_".repeat(wordLength);
 }
 
@@ -164,16 +229,16 @@ function showMessage(msg, win = false) {
 }
 
 function colorInputs() {
-  currentInputs.forEach((e, i) => {
-    if (!e.disabled) {
-      if (e.value === chosenWord[i]) {
-        showedHints[i] = chosenWord[i];
+  currentInputs.forEach((input, i) => {
+    if (!input.disabled) {
+      if (input.value === chosenWord[i]) {
+        showedLetters[i] = chosenWord[i];
         chosenWord = setCharAt(chosenWord, i, "_");
-        e.classList.add("in-place-color");
-      } else if (chosenWord.includes(e.value)) {
-        e.classList.add("not-in-place-color");
+        input.classList.add("in-place-color");
+      } else if (chosenWord.includes(input.value) && input.value !== "") {
+        input.classList.add("not-in-place-color");
       } else {
-        e.classList.add("wrong-color");
+        input.classList.add("wrong-color");
       }
     }
   });
@@ -181,8 +246,8 @@ function colorInputs() {
 
 function disableInputs() {
   document.querySelector(`.try-${currentTry}`).classList.add("disabled");
-  currentInputs.forEach((e) => {
-    e.disabled = true;
+  currentInputs.forEach((input) => {
+    input.disabled = true;
   });
 }
 
@@ -190,14 +255,14 @@ function enableInputs() {
   document.querySelector(`.try-${currentTry}`).classList.remove("disabled");
   currentInputs.forEach((input, i) => {
     input.disabled = false;
-    if (showedHints[i]) {
-      input.value = showedHints[i];
+    if (showedLetters[i]) {
+      input.value = showedLetters[i];
       input.classList.add("in-place-color");
       input.disabled = true;
     }
   });
   if (currentTry <= triesNumber) {
-    currentInputs[showedHints.indexOf(null)].focus();
+    currentInputs[showedLetters.indexOf(null)].focus();
   }
 }
 
@@ -208,7 +273,7 @@ function disableButtons() {
 }
 
 function getHint() {
-  availableInputs = currentInputs.filter((e) => e.value === "");
+  let availableInputs = currentInputs.filter((input) => input.value === "");
 
   if (availableInputs.length !== 0) {
     hints--;
@@ -223,7 +288,7 @@ function getHint() {
 
     input.value = chosenWord[indexOfLetter];
 
-    showedHints[indexOfLetter] = chosenWord[indexOfLetter];
+    showedLetters[indexOfLetter] = chosenWord[indexOfLetter];
 
     chosenWord = setCharAt(chosenWord, indexOfLetter, "_");
 
@@ -242,10 +307,11 @@ checkButton.addEventListener("click", () => {
   colorInputs();
   disableInputs();
   if (checkWin()) {
-    showMessage("YOU WIN!", true);
+    showMessage(`Congratulations!!!<br>YOU WIN!`, true);
     disableButtons();
+    document.querySelector(`.try-${currentTry}`).classList.remove("disabled");
   } else if (currentTry === triesNumber) {
-    showMessage(`YOU LOSE!<br>The word was '${wordCopy}'.`);
+    showMessage(`YOU LOSE!<br>The Word Was '${wordCopy}'.`);
     disableButtons();
   } else {
     currentTry++;
@@ -262,15 +328,19 @@ newGameButton.addEventListener("click", () => {
 hintButton.addEventListener("click", () => {
   if (hints > 0) {
     getHint();
-    if (showedHints.includes(null)) {
-      currentInputs[showedHints.indexOf(null)].focus();
+    if (showedLetters.includes(null)) {
+      currentInputs[showedLetters.indexOf(null)].focus();
     }
   }
 });
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
-    checkButton.click();
+    if (!checkButton.disabled) {
+      checkButton.click();
+    } else {
+      newGameButton.click();
+    }
   }
 });
 
